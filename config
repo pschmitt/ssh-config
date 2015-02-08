@@ -1,0 +1,2 @@
+Host git.lxl.io
+    ProxyCommand ssh -q pschmitt@lxl.io -W gitlab:10022
