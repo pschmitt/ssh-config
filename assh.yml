@@ -1,0 +1,92 @@
+hosts:
+    home:
+        Hostname: 192.168.0.1
+        Inherits:
+        - wrt
+        Gateways:
+        - direct
+        - home-remote
+        - home-remote-sslh
+
+    home-remote:
+        Hostname: home.lxl.io
+        Inherits:
+        - wrt
+
+    home-remote-sslh:
+        Hostname: home.lxl.io
+        Inherits:
+        - sslh
+        - wrt
+
+    lxl.io:
+        Hostname: lxl.io
+        Gateways:
+        - direct
+        - home-remote-sslh
+
+    lxl.io-sslh:
+        Hostname: lxl.io
+        Inherits:
+        - sslh
+
+    nasteanas:
+        Hostname: 192.168.0.120
+        # LocalForward: 5050 127.0.0.1:5050
+        # LocalForward: 6789 127.0.0.1:6789
+        # LocalForward: 8989 127.0.0.1:8989
+        # LocalForward: 9091 127.0.0.1:9091
+        Inherits:
+        - home-dev
+        - nox11
+
+    octopi:
+        Hostname: 192.168.0.211
+        Inherits:
+        - home-dev
+        - nox11
+
+    osmc:
+        Hostname: 192.168.1.4
+        User: osmc
+        Inherits:
+        - home-dev
+        - nox11
+
+    aur.archlinux.org:
+        IdentitiesOnly: yes
+        IdentityFile: ~/.ssh/id_aur
+        User: aur
+        Gateways:
+        - home
+
+    work:
+        Hostname: localhost
+        User: core
+        Port: 3122
+        Gateways:
+        - home
+
+
+templates:
+    wrt:
+        User: root
+        ForwardX11: no
+    home-dev:
+        Gateways:
+        - direct
+        - home
+    sslh:
+        Port: 443
+    nox11:
+        ForwardX11: no
+
+
+defaults:
+    # Defaults are applied to all hosts
+    User: pschmitt
+    ControlMaster: auto
+    ControlPath: ~/.ssh/sockets/socket-%r@%h:%p
+    ControlPersist: yes
+    Port: 22
+    ServerAliveInterval: 120
