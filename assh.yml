@@ -9,26 +9,36 @@ hosts:
         - home-remote-sslh
 
     home-remote:
-        Hostname: home.lxl.io
+        Hostname: home.comreset.io
         Inherits:
         - wrt
 
     home-remote-sslh:
-        Hostname: home.lxl.io
+        Hostname: home.comreset.io
         Inherits:
         - sslh
         - wrt
 
-    lxl.io:
-        Hostname: lxl.io
+    comreset:
+        Hostname: comreset.io
+        Aliases:
+        - com
+        - lxl.io
         Gateways:
         - direct
         - home-remote-sslh
 
-    lxl.io-sslh:
-        Hostname: lxl.io
+    comreset-sslh:
+        Hostname: comreset.io
         Inherits:
         - sslh
+
+    web:
+        Hostname: 10.0.0.2
+        Inherits:
+        - coreos
+        Gateways:
+        - comreset.io
 
     nasteanas:
         Hostname: 192.168.0.120
@@ -36,7 +46,35 @@ hosts:
         # LocalForward: 6789 127.0.0.1:6789
         # LocalForward: 8989 127.0.0.1:8989
         # LocalForward: 9091 127.0.0.1:9091
+        Aliases:
+        - ntn
+        - nas
         Inherits:
+        - home-dev
+        - nox11
+
+    gl:
+        Hostname: 192.168.8.1
+        User: root
+
+    ntn-rescue:
+        Hostname: 192.168.0.120
+        User: root
+        UserKnownHostsFile: /dev/null
+        StrictHostKeyChecking: no
+        Gateways:
+        - gl
+
+    ipmi:
+        Hostname: 192.168.0.113
+        User: admin
+        Inherits:
+        - home-dev
+        - nox11
+
+    luks-ntn:
+        Inherits:
+        - luks-remote
         - home-dev
         - nox11
 
@@ -60,12 +98,17 @@ hosts:
         Gateways:
         - home
 
-    work:
-        Hostname: localhost
-        User: core
-        Port: 3122
+    anongit.freedesktop.org:
         Gateways:
         - home
+
+    win10:
+        Hostname: 10.0.0.199
+        User: pschmitt
+        Aliases:
+        - vdi
+        Gateways:
+        - comreset
 
 
 templates:
@@ -76,17 +119,26 @@ templates:
         Gateways:
         - direct
         - home
+    coreos:
+        User: core
+        ForwardX11: no
     sslh:
         Port: 443
     nox11:
         ForwardX11: no
+    luks-remote:
+        User: root
+        UserKnownHostsFile: /dev/null
 
 
 defaults:
     # Defaults are applied to all hosts
     User: pschmitt
     ControlMaster: auto
-    ControlPath: ~/.ssh/sockets/socket-%r@%h:%p
+    ControlPath: ~/.local/share/ssh/sockets/socket-%r@%h:%p
     ControlPersist: yes
     Port: 22
     ServerAliveInterval: 120
+
+includes:
+    - ~/.ssh/work.yml

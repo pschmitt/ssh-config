@@ -1,0 +1,172 @@
+hosts:
+    gw:
+        Hostname: 172.29.249.158
+        Inherits:
+        - coreos
+
+    work:
+        Hostname: localhost
+        Port: 3122
+        Gateways:
+        - home
+        Inherits:
+        - coreos
+
+    ws:
+        Hostname: 172.29.249.163
+        Aliases:
+        - 172.29.249.163
+        Inherits:
+        - work-dev
+
+    vault:
+        Hostname: vault.dt.ept.lu
+        Inherits:
+        - coreos
+        - work-dev
+
+    git.3s.dt.ept.lu:
+        Hostname: git.3s.dt.ept.lu
+        Inherits:
+        - work-dev
+        Aliases:
+        - gitlab
+        - git-ict
+
+    gitlab-ict-os:
+        Hostname: git.3s.dt.ept.lu
+        Port: 2222
+        Inherits:
+        - coreos
+        - work-dev
+
+    anongit.freedesktop.org:
+        Gateways:
+        - home
+
+    vma:
+        Hostname: 3s-ict-vma.dt.ept.lu
+        Inherits:
+        - work-dev
+
+    opsview:
+        Hostname: ict-opsview.dt.ept.lu
+        User: root
+        Inherits:
+        - work-dev
+
+    opsview-slave:
+        Hostname: ict-ops-sl01.dt.ept.lu
+        User: root
+        Inherits:
+        - work-dev
+
+    opsview-db:
+        Hostname: ict-ops-db01.dt.ept.lu
+        User: root
+        Inherits:
+        - work-dev
+
+    "pi-ict-ops[1-2]":
+        Hostname: "%h.dt.ept.lu"
+        Inherits:
+        - raspbian
+        - work-dev
+
+    scheduler:
+        Hostname: scheduler.dt.ept.lu
+        Aliases:
+        - rundeck
+        - sched
+        Inherits:
+        - work-dev
+        - coreos
+
+    fortictl:
+        Hostname: fortictl.3s.dt.ept.lu
+        Aliases:
+        - forti
+        Inherits:
+        - coreos
+        - work-dev
+
+    blackmesa:
+        Hostname: blackmesa.3s.dt.ept.lu
+        Aliases:
+        - blackm
+        Inherits:
+        - work-dev
+
+    aperture:
+        Hostname: aperture.3s.dt.ept.lu
+        Aliases:
+        - apert
+        Inherits:
+        - work-dev
+
+    "vpc[0-9]*":
+        Hostname: "%h-vcs1.vcloud"
+        Inherits:
+        - work-dev
+
+    test-vpc:
+        Hostname: 100.65.35.99
+        User: root
+        Inherits:
+        - work-dev
+
+    caas-test-vcs:
+        Hostname: 100.65.17.121
+        User: root
+        Inherits:
+        - work-dev
+
+    mattermost:
+        Hostname: mattermost.dt.ept.lu
+        Inherits:
+        - coreos
+        - work-dev
+
+    docker:
+        Hostname: docker.dt.ept.lu
+        Aliases:
+        - registry
+        - portus
+        Inherits:
+        - coreos
+        - work-dev
+
+    pirm:
+        Hostname: pirm.dt.ept.lu
+        Inherits:
+        - coreos
+        - work-dev
+
+    pirm-staging:
+        Hostname: pirm-staging.dt.ept.lu
+        Inherits:
+        - coreos
+        - work-dev
+
+    db-mgmt:
+        Hostname: db-mgmt.3s.dt.ept.lu
+        Inherits:
+        - coreos
+        - work-dev
+
+    tasks:
+        Hostname: tasks.3s.dt.ept.lu
+        Aliases:
+        - redmine
+        Inherits:
+        - coreos
+        - work-dev
+
+templates:
+    raspbian:
+        User: pi
+    work-dev:
+        Gateways:
+        - direct
+        - work
+        ProxyCommand: "ncat %h %p"
